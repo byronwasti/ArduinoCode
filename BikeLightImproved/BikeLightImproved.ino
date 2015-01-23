@@ -86,18 +86,45 @@ void OutIn(){
     delay(freq);
 }
 
+void InOut(){
+    int i;
+    for (i =3; i < 1; --i){
+        switch(i){
+            case 1: 
+                digitalWrite(13, HIGH);
+                digitalWrite(3, HIGH);
+                delay(freq);
+                digitalWrite(13, LOW);
+                digitalWrite(3,LOW);
+            case 2:
+                digitalWrite(11, HIGH);
+                digitalWrite(5, HIGH);
+                delay(freq);
+                digitalWrite(11, LOW);
+                digitalWrite(5,LOW);
+            case 3:
+                digitalWrite(9, HIGH);
+                digitalWrite(7, HIGH);
+                delay(freq);
+                digitalWrite(9, LOW);
+                digitalWrite(7,LOW);
+        }
+    }    
+    delay(freq);
+}
+
 void loop(){
     switch (i){
       case 0: Sweep(); break;
       case 1: OutIn(); break;
-      case 2: Colors(); break;
-      case 3: SOS();
-      case 4: break;
+      case 2: InOut(); break;
+      case 3: Colors(); break;
+      case 4: SOS(); break;
+      case 5: break;
     }
     if ( digitalRead(ButtonPin) == HIGH){
         i++;
-        Serial.print(i);
-        if (i > 4) i = 0;
+        if (i > 5) i = 0;
         delay(1000);
     }
     
