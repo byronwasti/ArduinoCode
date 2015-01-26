@@ -1,4 +1,6 @@
 const int ButtonPin = 2;
+const int analogInPin = A0;
+int sensorValue = 0;
 int i;
 int freq = 100;
 
@@ -88,21 +90,21 @@ void OutIn(){
 
 void InOut(){
     int i;
-    for (i =3; i < 1; --i){
+    for (i =0; i < 3; ++i){
         switch(i){
-            case 1: 
+            case 2: 
                 digitalWrite(13, HIGH);
                 digitalWrite(3, HIGH);
                 delay(freq);
                 digitalWrite(13, LOW);
                 digitalWrite(3,LOW);
-            case 2:
+            case 1:
                 digitalWrite(11, HIGH);
                 digitalWrite(5, HIGH);
                 delay(freq);
                 digitalWrite(11, LOW);
                 digitalWrite(5,LOW);
-            case 3:
+            case 0:
                 digitalWrite(9, HIGH);
                 digitalWrite(7, HIGH);
                 delay(freq);
@@ -114,6 +116,9 @@ void InOut(){
 }
 
 void loop(){
+  sensorValue = analogRead(analogInPin);
+  freq = map(sensorValue, 0, 1023, 10, 1000);
+  
     switch (i){
       case 0: Sweep(); break;
       case 1: OutIn(); break;
