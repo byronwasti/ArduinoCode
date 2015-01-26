@@ -20,91 +20,39 @@ void setup(){
 }
 
 
-
-void AllOn( int D){
-  int i;
-  for (i = 3; i < 13; i += 2){
-      digitalWrite(i, HIGH);
-  }
-  delay(D);
-  for(i = 3; i < 13; i += 2){
-      digitalWrite(i, LOW);
-  }
-  delay(D);
-}
-  
-
 void SOS(){
-  int i;
-  for ( i = 0; i < 3; i++){
-      AllOn(100);
-  }
-  for (i = 0; i < 3; i++){
-    AllOn(500);
-  }
-  for(i = 0; i < 3; i++){
-    AllOn(100);
-  }   
-  delay(1000);
-}
-
-void OutIn(){
-    int i;
-    for (i =0; i < 3; ++i){
-        switch(i){
-            case 0: 
-                digitalWrite(13, HIGH);
-                digitalWrite(3, HIGH);
-                delay(freq);
-                digitalWrite(13, LOW);
-                digitalWrite(3,LOW);
-            case 1:
-                digitalWrite(11, HIGH);
-                digitalWrite(5, HIGH);
-                delay(freq);
-                digitalWrite(11, LOW);
-                digitalWrite(5,LOW);
-            case 2:
-                digitalWrite(9, HIGH);
-                digitalWrite(7, HIGH);
-                delay(freq);
-                digitalWrite(9, LOW);
-                digitalWrite(7,LOW);
+/*
+    Letter = 0; S
+    Letter = 1; O
+*/
+    
+    int i, letter, j; 
+    if( currentMillis - previousMillis > freq){
+        previousMillis = currentMillis;
+        
+        if ( letter = 1) {
+            j++;
         }
-    }    
-    delay(freq);
-}
-
-void InOut(){
-    int i;
-    for (i =0; i < 3; ++i){
-        switch(i){
-            case 2: 
-                digitalWrite(13, HIGH);
-                digitalWrite(3, HIGH);
-                delay(freq);
-                digitalWrite(13, LOW);
-                digitalWrite(3,LOW);
-            case 1:
-                digitalWrite(11, HIGH);
-                digitalWrite(5, HIGH);
-                delay(freq);
-                digitalWrite(11, LOW);
-                digitalWrite(5,LOW);
-            case 0:
-                digitalWrite(9, HIGH);
-                digitalWrite(7, HIGH);
-                delay(freq);
-                digitalWrite(9, LOW);
-                digitalWrite(7,LOW);
+        else {
+            if (LEDstate == LOW) LEDstate = HIGH;
+            else LEDstate = LOW;
         }
-    }    
-    delay(freq);
+    }
 }
 
-
-void IN_OUTS(){
+void IN_OUTS(direc){
   int i;
+  int a, b, c;
+  if (direc == 0){
+         a = 0;
+         b = 1;
+         c = 2;
+    }
+    else {
+        a = 2;
+        b = 1;
+        c = 0;
+    }
   
   if( currentMillis - previousMillis >= freq){
     previousMillis = currentMillis;
@@ -115,8 +63,17 @@ void IN_OUTS(){
     }
     else LEDstate = LOW;
   }
-  
-  
+  switch( i ){
+    case a:
+        digitalWrite(13, LEDstate);
+        digitalWrite(3, LEDstate);
+    case b:
+        digitalWrite(11, LEDstate);
+        digitalWrite(5, LEDstate);
+    case c:
+        digitalWrite(9, LEDstate);
+        digitalWrite(7, LEDstate);
+  }
   
 }
 
@@ -163,8 +120,8 @@ void loop(){
     switch (STATE){
       case 0: Sweep(); break;
       case 1: Colors(); break;
-      case 2: InOut(); break;
-      case 3: OutIn(); break;
+      case 2: IN_OUTS(0); break;
+      case 3: IN_OUTS(1); break;
       case 4: SOS(); break;
       default: break;
     }     
