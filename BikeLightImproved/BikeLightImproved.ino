@@ -1,8 +1,13 @@
 const int ButtonPin = 2;
 const int analogInPin = A0;
 int sensorValue = 0;
-int i;
+int STATE;
 int freq = 100;
+
+unsigned long previousMillis = 0;
+unsigned long currentMillis;
+
+int LEDstate = LOW;
 
 void setup(){
     pinMode(13, OUTPUT);
@@ -14,14 +19,7 @@ void setup(){
     pinMode(ButtonPin, INPUT);
 }
 
-void Sweep(){
-    int i;
-     for ( i = 0; i < 6; ++i){
-        digitalWrite( 13 - 2*i, HIGH);
-        delay(freq);
-        digitalWrite(13 - 2*i, LOW);
-    }
-}
+
 
 void AllOn( int D){
   int i;
@@ -48,17 +46,6 @@ void SOS(){
     AllOn(100);
   }   
   delay(1000);
-}
-
-void Colors(){
-  int i;
-  for (i = 0; i < 3; ++i){
-      digitalWrite(13 - 2*i, HIGH);
-       digitalWrite(13 - 6 - 2*i, HIGH);
-       delay(freq);
-       digitalWrite(13-2*i, LOW);
-       digitalWrite(13-6 -2*i, LOW);
-  }
 }
 
 void OutIn(){
@@ -115,23 +102,79 @@ void InOut(){
     delay(freq);
 }
 
+
+void IN_OUTS(){
+  int i;
+  
+  if( currentMillis - previousMillis >= freq){
+    previousMillis = currentMillis;
+    if( LEDstate == LOW){
+        LEDstate = HIGH;
+        i++;
+        if(i > 2) i = 0;
+    }
+    else LEDstate = LOW;
+  }
+  
+  
+  
+}
+
+void Colors(){
+  static int i;
+  
+  if( currentMillis - previousMillis >= freq){
+      previousMillis = currentMillis;
+      if (LEDstate == LOW){
+        LEDstate = HIGH;
+        i++;
+        if(i>2) i = 0;
+      }
+      else LEDstate = LOW;
+  }
+  
+  digitalWrite(13 - 2*i, LEDstate);
+  digitalWrite(13 - 6 - 2*i, LEDstate);
+}
+
+void Sweep(){
+  static int i;
+   
+   if(currentMillis - previousMillis >= freq){
+        previousMillis = currentMillis;
+        //digitalWrite(13, HIGH);
+        if (LEDstate == LOW) {
+            LEDstate = HIGH;
+            i++;
+            if (i > 5) i = 0;
+        }
+        else LEDstate = LOW;
+    }
+  digitalWrite( 13 - 2*i, LEDstate); 
+}
+
 void loop(){
+  currentMillis = millis();
+  
   sensorValue = analogRead(analogInPin);
   freq = map(sensorValue, 0, 1023, 10, 1000);
-  
-    switch (i){
+ 
+ 
+    switch (STATE){
       case 0: Sweep(); break;
-      case 1: OutIn(); break;
+      case 1: Colors(); break;
       case 2: InOut(); break;
-      case 3: Colors(); break;
+      case 3: OutIn(); break;
       case 4: SOS(); break;
-      case 5: break;
-    }
+      default: break;
+    }     
+
     if ( digitalRead(ButtonPin) == HIGH){
-        i++;
-        if (i > 5) i = 0;
+        STATE++;
+        if (STATE > 5) STATE = 0;
         delay(1000);
     }
+
     
 }
 
