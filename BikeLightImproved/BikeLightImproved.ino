@@ -19,7 +19,6 @@ void setup(){
     pinMode(ButtonPin, INPUT);
 }
 
-
 void SOS(){
 /*
     Letter = 0; S
