@@ -19,22 +19,51 @@ void setup(){
     pinMode(ButtonPin, INPUT);
 }
 
-void SOS(){
-/*
-    Letter = 0; S
-    Letter = 1; O
-*/
-    
-    int i, letter, j; 
+int S ( void ){
+    static i;
+
+    if (currentMillis - previousMillis > freq){
+        previousMillis = currentMillis;
+        i++;
+        if ( i % 2) LEDstate = HIGH;
+        else LEDstate = LOW;
+        if ( i > 5){
+            i = 0;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int O ( void ){
+    static i;
+
     if( currentMillis - previousMillis > freq){
         previousMillis = currentMillis;
-        
-        if ( letter = 1) {
-            j++;
+        i++;
+        if ( i % 4 == 0 ) LEDstate = LOW;
+        else LEDstate = HIGH;
+        if ( i > 11){
+            i = 0;
+            return 1;
         }
-        else {
-            if (LEDstate == LOW) LEDstate = HIGH;
-            else LEDstate = LOW;
+    }
+    return 0;
+}
+
+void SOS(){
+    static int j, k = 0;
+    switch(j) {
+        case 0: k = S(); break;
+        case 1: k = O(); break;
+        case 2: k = S(); break;
+    }
+    if (k == 1){
+        k = 0;
+        j++;
+        if (j > 2) {
+            j = 0;
+            return;
         }
     }
 }
@@ -130,7 +159,5 @@ void loop(){
         if (STATE > 5) STATE = 0;
         delay(1000);
     }
-
-    
 }
 
