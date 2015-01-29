@@ -19,14 +19,16 @@ void setup(){
     pinMode(ButtonPin, INPUT);
 }
 
+/*
 int S ( void ){
-    static i;
+    static int i;
 
     if (currentMillis - previousMillis > freq){
         previousMillis = currentMillis;
         i++;
         if ( i % 2) LEDstate = HIGH;
         else LEDstate = LOW;
+        
         if ( i > 5){
             i = 0;
             return 1;
@@ -36,7 +38,7 @@ int S ( void ){
 }
 
 int O ( void ){
-    static i;
+    static int i;
 
     if( currentMillis - previousMillis > freq){
         previousMillis = currentMillis;
@@ -68,7 +70,8 @@ void SOS(){
     }
 }
 
-void IN_OUTS(direc){
+
+void IN_OUTS(int direc){
   int i;
   int a, b, c;
   if (direc == 0){
@@ -91,19 +94,21 @@ void IN_OUTS(direc){
     }
     else LEDstate = LOW;
   }
+  const int x =a, y = b, z = c;
   switch( i ){
-    case a:
+    case 0:
         digitalWrite(13, LEDstate);
         digitalWrite(3, LEDstate);
-    case b:
+    case 1:
         digitalWrite(11, LEDstate);
         digitalWrite(5, LEDstate);
-    case c:
+    case 2:
         digitalWrite(9, LEDstate);
         digitalWrite(7, LEDstate);
   }
   
 }
+*/
 
 void Colors(){
   static int i;
@@ -148,9 +153,9 @@ void loop(){
     switch (STATE){
       case 0: Sweep(); break;
       case 1: Colors(); break;
-      case 2: IN_OUTS(0); break;
-      case 3: IN_OUTS(1); break;
-      case 4: SOS(); break;
+      //case 2: IN_OUTS(0); break;
+      //case 3: IN_OUTS(1); break;
+//      case 4: SOS(); break;
       default: break;
     }     
 
